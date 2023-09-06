@@ -1,0 +1,36 @@
+version: "3"
+
+networks:
+  spring-mysql:
+    driver: bridge
+
+services:
+  mysql-database:
+    container_name: mysql-database
+    image: mysql:5.7
+    ports:
+      - 3307:3306
+    networks:
+      - spring-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: spring-api-db
+    healthcheck:
+            test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+            timeout: 20s
+            retries: 10  
+
+  spring-api:
+    depends_on:
+      mysql-database:
+        condition: service_healthy
+    container_name: spring-api
+    build: 
+      dockerfile: Dockerfile
+    image: spring-api 
+    ports:
+      - 8000:8080
+    restart: on-failure
+    networks:
+      - spring-mysql
+
