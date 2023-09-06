@@ -1,5 +1,5 @@
 # spring-api-test
-simple spring app for learning docker
+simple spring & mysql app for learning docker
 
 # swagger ui listening on: localhost:8000/swagger
 
